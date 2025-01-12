@@ -1,5 +1,7 @@
 # MkDocs 项目构建、配置说明
 
+[关于 GitHub Pages - GitHub 文档](https://docs.github.com/zh/pages/getting-started-with-github-pages/about-github-pages#usage-limits)
+
 ## 构建指南
 
 本项目使用 mkdocs 生成文档，使用 mkdocs-material 主题。
@@ -24,6 +26,27 @@
 
    然后访问 [http://127.0.0.1:8000](http://127.0.0.1:8000) 即可预览文档。
 
+
+## 部署指南
+
+使用 [Github Pages 部署](https://www.mkdocs.org/user-guide/deploying-your-docs/) mkdocs 文档相当简单，只需要将项目作为 GitHub 项目存储，然后在命令行运行如下命令：
+
+```bash
+mkdocs gh-deploy
+```
+
+接下来就会自动完成 GitHub Pages 的部署工作。
+
+部署完成的网站链接为：[Yi's DevJourney](https://zhangyi1357.github.io/DevJourney/)
+
+不过需要注意的 GitHub Pages 有[用量限制](https://docs.github.com/zh/pages/getting-started-with-github-pages/about-github-pages#usage-limits)，摘录如下：
+
+- GitHub Pages 源仓库的建议限制为 1 GB。有关详细信息，请参阅 [关于 GitHub 上的大文件](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/about-large-files-on-github#file-and-repository-size-limitations)
+- 发布的 GitHub Pages 站点不得超过 1 GB。
+- 如果花费的时间超过 10 分钟，GitHub Pages 部署将超时。
+- GitHub Pages 站点的软带宽限制为每月 100 GB。
+- GitHub Pages 站点的软限制为每小时 10 次生成。 如果使用自定义 GitHub Actions 工作流生成和发布站点，则此限制不适用。
+- 为了为所有 GitHub Pages 站点提供一致的服务质量，可能会实施速率限制。 这些速率限制无意干扰 GitHub Pages 的合法使用。 如果你的请求触发了速率限制，你将收到相应响应，其中包含 HTTP 状态代码 `429` 以及信息性 HTML 正文。
 
 ## 配置项
 
@@ -57,7 +80,7 @@ markdown_extensions:
 pip install pymdown-extensions
 ```
 
-[^1]: https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#+toc.slugify
+[^1]:[https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#+toc.slugify](https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#+toc.slugify)
 
 ### Material 主题配置
 
