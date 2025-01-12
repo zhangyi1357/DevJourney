@@ -43,7 +43,7 @@
 
 这样在 Markdown 文件中就无法正常跳转，本地预览会出问题。另外这样的编写方式也不符合逻辑上的需要，试想两个标题分别为 “Material 主题配置” 和 “Material 笔记指南”，在网页端两个标题的链接分别为 `#Material` 和 `#Material`，显然这样的重复链接会导致无法正确找到正确的引用。
 
-以上问题可以通过[配置文件](https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#+toc.slugify)解决，在 `mkdocs.yml` 文件中添加如下配置即可：
+以上问题可以通过配置文件解决[^1]，在 `mkdocs.yml` 文件中添加如下配置即可：
 
 ```yaml
 markdown_extensions:
@@ -56,6 +56,8 @@ markdown_extensions:
 ```bash
 pip install pymdown-extensions
 ```
+
+[^1]: https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#+toc.slugify
 
 ### Material 主题配置
 
