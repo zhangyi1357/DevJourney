@@ -8,15 +8,21 @@ nav:
     - markdown-writing.md
     - project-building.md
 
+repo_name: zhangyi1357/DevJourney
+repo_url: https://github.com/zhangyi1357/DevJourney
+
+edit_uri: edit/main/docs
+
 theme:
   name: material
   language: zh
   features:
     - announce.dismiss
-    - content.action.edit
-    - content.action.view
+    # - content.action.edit
+    # - content.action.view
     - content.code.annotate
     - content.code.copy
+    - content.footnote.tooltips
     - content.tooltips
     - navigation.footer
     - navigation.indexes
@@ -50,7 +56,20 @@ theme:
   font:
     text: Roboto
     code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
+  - footnotes
   - toc:
-      slugify: !!python/name:pymdownx.slugs.uslugify
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+      permalink: true
+
+plugins:
+  - git-authors
+  - git-revision-date-localized:
+      type: date
+      enable_creation_date: true
+      fallback_to_build_date: true
