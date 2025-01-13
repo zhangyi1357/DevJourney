@@ -4,9 +4,10 @@ nav:
   - 主页: index.md
   - 工具使用:
     - git-usage.md
+    - clangd-usage.md
   - 笔记指南:
-    - markdown-writing.md
     - project-building.md
+    - markdown-writing.md
 
 repo_name: zhangyi1357/DevJourney
 repo_url: https://github.com/zhangyi1357/DevJourney
