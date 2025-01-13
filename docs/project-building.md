@@ -1,7 +1,5 @@
 # MkDocs 项目构建、配置说明
 
-[关于 GitHub Pages - GitHub 文档](https://docs.github.com/zh/pages/getting-started-with-github-pages/about-github-pages#usage-limits)
-
 ## 构建指南
 
 本项目使用 mkdocs 生成文档，使用 mkdocs-material 主题。
