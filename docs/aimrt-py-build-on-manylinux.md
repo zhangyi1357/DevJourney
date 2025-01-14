@@ -82,3 +82,4 @@ source /opt/ros/humble/setup.bash
 auditwheel repair build/aimrt_py_pkg/dist/aimrt_py-*.whl
 ```
 
+最终修复后的 wheel 包位于 `/home/aimrt/wheelhouse` 目录下，其 ABI tag 为 `manylinux_2_28_x86_64`。
