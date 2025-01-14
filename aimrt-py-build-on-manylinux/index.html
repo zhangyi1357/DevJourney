@@ -751,6 +751,7 @@
 <p>最后对构建出的 wheel 包执行 <code>auditwheel repair</code> 命令，修复 wheel 包的 ABI 兼容性问题。</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>auditwheel<span class="w"> </span>repair<span class="w"> </span>build/aimrt_py_pkg/dist/aimrt_py-*.whl
 </span></code></pre></div>
+<p>最终修复后的 wheel 包位于 <code>/home/aimrt/wheelhouse</code> 目录下，其 ABI tag 为 <code>manylinux_2_28_x86_64</code>。</p>
 
 
 
