@@ -421,6 +421,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#三结果" class="md-nav__link">
+    <span class="md-ellipsis">
+      三、结果
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -671,6 +680,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#三结果" class="md-nav__link">
+    <span class="md-ellipsis">
+      三、结果
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -691,7 +709,7 @@
 
 <h1 id="aimrt-py-在-manylinux-上的构建过程">AimRT-Py 在 manylinux 上的构建过程<a class="headerlink" href="#aimrt-py-在-manylinux-上的构建过程" title="Permanent link">&para;</a></h1>
 <h2 id="一背景">一、背景<a class="headerlink" href="#一背景" title="Permanent link">&para;</a></h2>
-<p>现需要构建在各种 linux 发行版上通用的 AimRT-Py 包，需要一个足够低版本的 glibc 的 linux 发行版，一方面解决用户 glibc 版本低于 Ubuntu 22.04 上默认的 2.30 的问题，另一方面方便制作可以上传到 PyPI 上的二进制包。</p>
+<p>现需要构建在各种 linux 发行版上<strong>通用</strong>的 AimRT-Py 包，需要一个足够低版本的 glibc 的 linux 发行版，一方面解决用户 glibc 版本低于 Ubuntu 22.04 上默认的 2.30 的问题，另一方面方便制作可以上传到 PyPI 上的二进制包。</p>
 <p><a href="https://github.com/pypa/manylinux">Manylinux</a> 是针对二进制 python 包构建的专用镜像，在其之上构建出的 python 包，可以保证在各种 linux 发行版上通用，专门用于制作可以上传到 PyPI 上的二进制包。</p>
 <h2 id="二过程记录">二、过程记录<a class="headerlink" href="#二过程记录" title="Permanent link">&para;</a></h2>
 <p>基本环境准备，拉取镜像、<a href="https://www.cnblogs.com/sysin/p/18256193">换国内源</a></p>
@@ -721,37 +739,100 @@
 <p><a href="https://docs.ros.org/en/humble/Installation/RHEL-Install-RPMs.html">https://docs.ros.org/en/humble/Installation/RHEL-Install-RPMs.html</a></p>
 <p>还需要额外做一些修复项：</p>
 <ol>
-<li>
-<p>编译 AimRT ros2_plugin 过程中需要安装一些缺少的 python 包</p>
+<li>编译 AimRT ros2_plugin 过程中需要安装一些缺少的 python 包</li>
+</ol>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">empy</span><span class="o">==</span><span class="m">3</span>.3.4<span class="w"> </span>catkin_pkg<span class="w"> </span>numpy<span class="w"> </span>lark
 </span></code></pre></div>
-</li>
-<li>
-<p>编译 iceoryx 插件需要安装 libatomic-devel 和 libacl-devel，编译 opentelemetry 插件需要安装 libcurl-devel</p>
+<ol>
+<li>编译 iceoryx 插件需要安装 libatomic-devel 和 libacl-devel，编译 opentelemetry 插件需要安装 libcurl-devel</li>
+</ol>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>dnf<span class="w"> </span>install<span class="w"> </span>gcc-toolset-14-libatomic-devel<span class="w"> </span>libacl-devel<span class="w"> </span>libcurl-devel
 </span></code></pre></div>
-</li>
-<li>
-<p>此外针对 AimRT 仓库本身，还需要修改一下 pybind11 的头文件包含问题（gcc14 才出现）</p>
-<p><a href="https://github.com/pybind/pybind11/issues/5206">https://github.com/pybind/pybind11/issues/5206</a></p>
-</li>
+<ol>
+<li>编译 zenoh 插件需要安装 rust，而默认源安装较慢，建议使用国内源</li>
 </ol>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 可以把以下两行添加到 ~/.bashrc 等文件，使之成为全局环境变量，这样后续所有 rustup 或 cargo 命令均会使用此环境变量</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RUSTUP_UPDATE_ROOT</span><span class="o">=</span>https://mirrors.ustc.edu.cn/rust-static/rustup
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RUSTUP_DIST_SERVER</span><span class="o">=</span>https://mirrors.tuna.tsinghua.edu.cn/rustup
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>curl<span class="w"> </span>--proto<span class="w"> </span><span class="s1">&#39;=https&#39;</span><span class="w"> </span>--tlsv1.2<span class="w"> </span>-sSf<span class="w"> </span>https://sh.rustup.rs<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span></code></pre></div>
+<p>以上是加速 rust 本身的安装，如果要加速 rust 包的下载，可以替换 crates.io 源，更新 ~/.cargo/config 文件，内容如下</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="o">[</span>source.crates-io<span class="o">]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/rust-lang/crates.io-index&quot;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 替换成你偏好的镜像源</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>replace-with<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;sjtu&#39;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1">#replace-with = &#39;ustc&#39;</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># 清华大学</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="o">[</span>source.tuna<span class="o">]</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1"># 中国科学技术大学</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="o">[</span>source.ustc<span class="o">]</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="c1"># 上海交通大学</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="o">[</span>source.sjtu<span class="o">]</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="c1"># rustcc社区</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="o">[</span>source.rustcc<span class="o">]</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span>
+</span></code></pre></div>
+<ol>
+<li>此外针对 AimRT 仓库本身，还需要修改一下 pybind11 的头文件包含问题（gcc14 才出现）</li>
+</ol>
+<p><a href="https://github.com/pybind/pybind11/issues/5206">https://github.com/pybind/pybind11/issues/5206</a></p>
 <p>构建命令</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/home
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>aimrt
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/AimRT/AimRT.git<span class="w"> </span>aimrt<span class="w"> </span>--depth<span class="o">=</span><span class="m">1</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">cd</span><span class="w"> </span>aimrt
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">source</span><span class="w"> </span>/opt/ros/humble/setup.bash
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>./build.sh<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span>-DAIMRT_BUILD_EXAMPLES<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span>-DAIMRT_BUILD_DOCUMENT<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span>-DAIMRT_BUILD_MQTT_PLUGIN<span class="o">=</span>OFF
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>/home
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>aimrt
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/AimRT/AimRT.git<span class="w"> </span>aimrt<span class="w"> </span>--depth<span class="o">=</span><span class="m">1</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">cd</span><span class="w"> </span>aimrt
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">source</span><span class="w"> </span>/opt/ros/humble/setup.bash
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>./build.sh<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span>-DAIMRT_BUILD_EXAMPLES<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span>-DAIMRT_BUILD_DOCUMENT<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span>-DAIMRT_BUILD_MQTT_PLUGIN<span class="o">=</span>OFF
 </span></code></pre></div>
 <p>最后对构建出的 wheel 包执行 <code>auditwheel repair</code> 命令，修复 wheel 包的 ABI 兼容性问题。</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>auditwheel<span class="w"> </span>repair<span class="w"> </span>build/aimrt_py_pkg/dist/aimrt_py-*.whl
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>auditwheel<span class="w"> </span>repair<span class="w"> </span>build/aimrt_py_pkg/dist/aimrt_py-*.whl
 </span></code></pre></div>
 <p>最终修复后的 wheel 包位于 <code>/home/aimrt/wheelhouse</code> 目录下，其 ABI tag 为 <code>manylinux_2_28_x86_64</code>。</p>
+<h2 id="三结果">三、结果<a class="headerlink" href="#三结果" title="Permanent link">&para;</a></h2>
+<p>可以在 manylinux_2_28 上完整编译 AimRT，但是最终编出来的包中 ros2 相关的 .so 依赖一些在 manylinux 镜像上才有的动态库，例如 ros2  自身的一些动态库，还有其系统自带的 python3.6，导致其无法在 Ubuntu 22.04 上正常使用。</p>
+<p>此外一些其他的插件包也有一些符号依赖的问题，使用 <a href="https://github.com/messense/auditwheel-symbols">auditwheel-symbols</a> 工具检查结果如下：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># auditwheel-symbols -m 2_28 build/aimrt_py_pkg/dist/aimrt_py-0.10.0-cp310-cp310-linux_x86_64.whl
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>aimrt_py/aimrt_python_runtime.cpython-310-x86_64-linux-gnu.so is manylinux_2_28 compliant.
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>aimrt_py/libaimrt_echo_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>aimrt_py/libaimrt_grpc_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>aimrt_py/libaimrt_iceoryx_plugin.so is not manylinux_2_28 compliant because it links the following forbidden libraries:
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>libacl.so.1
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>libatomic.so.1
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>aimrt_py/libaimrt_log_control_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>aimrt_py/libaimrt_mqtt_plugin.so is not manylinux_2_28 compliant because it links the following forbidden libraries:
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>libanl.so.1
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>libssl.so.1.1
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>libcrypto.so.1.1
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>aimrt_py/libaimrt_net_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>aimrt_py/libaimrt_opentelemetry_plugin.so is not manylinux_2_28 compliant because it links the following forbidden libraries:
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>libcurl.so.4
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>aimrt_py/libaimrt_parameter_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>aimrt_py/libaimrt_proxy_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>aimrt_py/libaimrt_record_playback_plugin.so is manylinux_2_28 compliant.
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>aimrt_py/libaimrt_time_manipulator_plugin.so is manylinux_2_28 compliant.
+</span></code></pre></div>
+<p>这与上述安装的内容有一定的对应关系。</p>
+<p>如果将这样的包上传 PyPI，其中需要去除至少 ros2、mqtt 相关的功能和插件，插件可以容易地下载，但是 ros2 相关功能想要通过额外的方式提供具有一定的困难，最终还是需要用户在指定的 Ubuntu 22.04 平台上运行，又需要额外下载内容，范式发散，得不偿失。</p>
+<p>结论：</p>
+<ol>
+<li>Wheel 包中至少有 ROS2 接口、ROS2 插件、mqtt 插件无法完整得到跨发行版二进制；</li>
+<li>将部分功能二进制上 PyPI 会导致用户使用时的困惑，增大维护难度；</li>
+<li>暂时不上 PyPI；</li>
+<li>Conda 使用问题通过文档说明进行 workaround（将 conda 中的 libstdc++ 软链接到系统的 libstdc++ 即可）。</li>
+</ol>
 
 
 
@@ -774,7 +855,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2025年1月14日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2025年1月15日</span>
   </span>
 
     
