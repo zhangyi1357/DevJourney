@@ -36,6 +36,7 @@ cat ~/.ssh/id_ed25519.pub
 
 # Add the secret key into ssh-agent
 eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519.pub
 ```
 
 ### SSH 连接报错
@@ -61,4 +62,3 @@ Host github.com
  Hostname ssh.github.com
  Port 443
 ````
-
