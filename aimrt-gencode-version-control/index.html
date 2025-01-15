@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../aimrt-py-build-on-manylinux/">
       
       
-        <link rel="next" href="../aimrt-gencode-version-control/">
+        <link rel="next" href="../git-usage/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>AimRT-Py manylinux 构建 - Yi's DevJourney</title>
+        <title>AimRT 代码生成版本控制 - Yi's DevJourney</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#aimrt-py-在-manylinux-上的构建过程" class="md-skip">
+        <a href="#aimrt-生成代码版本检查" class="md-skip">
           跳转至
         </a>
       
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AimRT-Py manylinux 构建
+              AimRT 代码生成版本控制
             
           </span>
         </div>
@@ -357,6 +357,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../aimrt-py-build-on-manylinux/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AimRT-Py manylinux 构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -373,7 +394,7 @@
           
   
   <span class="md-ellipsis">
-    AimRT-Py manylinux 构建
+    AimRT 代码生成版本控制
   </span>
   
 
@@ -384,7 +405,7 @@
         
   
   <span class="md-ellipsis">
-    AimRT-Py manylinux 构建
+    AimRT 代码生成版本控制
   </span>
   
 
@@ -406,27 +427,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#一背景" class="md-nav__link">
+  <a href="#protobuf-的做法" class="md-nav__link">
     <span class="md-ellipsis">
-      一、背景
+      Protobuf 的做法
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#二过程记录" class="md-nav__link">
+  <a href="#初步方案" class="md-nav__link">
     <span class="md-ellipsis">
-      二、过程记录
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#三结果" class="md-nav__link">
-    <span class="md-ellipsis">
-      三、结果
+      初步方案
     </span>
   </a>
   
@@ -436,27 +448,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../aimrt-gencode-version-control/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    AimRT 代码生成版本控制
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -686,27 +677,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#一背景" class="md-nav__link">
+  <a href="#protobuf-的做法" class="md-nav__link">
     <span class="md-ellipsis">
-      一、背景
+      Protobuf 的做法
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#二过程记录" class="md-nav__link">
+  <a href="#初步方案" class="md-nav__link">
     <span class="md-ellipsis">
-      二、过程记录
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#三结果" class="md-nav__link">
-    <span class="md-ellipsis">
-      三、结果
+      初步方案
     </span>
   </a>
   
@@ -730,131 +712,52 @@
   
 
 
-<h1 id="aimrt-py-在-manylinux-上的构建过程">AimRT-Py 在 manylinux 上的构建过程<a class="headerlink" href="#aimrt-py-在-manylinux-上的构建过程" title="Permanent link">&para;</a></h1>
-<h2 id="一背景">一、背景<a class="headerlink" href="#一背景" title="Permanent link">&para;</a></h2>
-<p>现需要构建在各种 linux 发行版上<strong>通用</strong>的 AimRT-Py 包，需要一个足够低版本的 glibc 的 linux 发行版，一方面解决用户 glibc 版本低于 Ubuntu 22.04 上默认的 2.30 的问题，另一方面方便制作可以上传到 PyPI 上的二进制包。</p>
-<p><a href="https://github.com/pypa/manylinux">Manylinux</a> 是针对二进制 python 包构建的专用镜像，在其之上构建出的 python 包，可以保证在各种 linux 发行版上通用，专门用于制作可以上传到 PyPI 上的二进制包。</p>
-<h2 id="二过程记录">二、过程记录<a class="headerlink" href="#二过程记录" title="Permanent link">&para;</a></h2>
-<p>基本环境准备，拉取镜像、<a href="https://www.cnblogs.com/sysin/p/18256193">换国内源</a></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>quay.io/pypa/manylinux_2_28_x86_64:latest
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>quay.io/pypa/manylinux_2_28_x86_64:latest<span class="w"> </span>/bin/bash
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>sed<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s|^mirrorlist=|#mirrorlist=|g&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>-e<span class="w"> </span><span class="s1">&#39;s|^# baseurl=https://repo.almalinux.org|baseurl=https://mirrors.aliyun.com|g&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>-i.bak<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>/etc/yum.repos.d/almalinux*.repo
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>sed<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s|^metalink=|#metalink=|g&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span>-e<span class="w"> </span><span class="s1">&#39;s|^#baseurl=https://download.example/pub|baseurl=https://mirrors.aliyun.com|g&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span>-e<span class="w"> </span><span class="s1">&#39;s|^#baseurl=https://download.fedoraproject.org/pub|baseurl=https://mirrors.aliyun.com|g&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span>-i.bak<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span>/etc/yum.repos.d/epel*.repo
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ORIGIN_PATH</span><span class="o">=</span><span class="nv">$PATH</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nb">export</span><span class="w"> </span><span class="nv">python_version</span><span class="o">=</span><span class="s2">&quot;cp310-cp310&quot;</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/opt/python/</span><span class="si">${</span><span class="nv">python_version</span><span class="si">}</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>pip<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>global.index-url<span class="w"> </span>https://pypi.tuna.tsinghua.edu.cn/simple
+<h1 id="aimrt-生成代码版本检查">AimRT 生成代码版本检查<a class="headerlink" href="#aimrt-生成代码版本检查" title="Permanent link">&para;</a></h1>
+<h2 id="protobuf-的做法">Protobuf 的做法<a class="headerlink" href="#protobuf-的做法" title="Permanent link">&para;</a></h2>
+<p>参考 <a href="https://protobuf.dev/support/cross-version-runtime-guarantee/">protobuf 跨版本运行时保证</a></p>
+<p>简单总结：</p>
+<ul>
+<li>新的生成代码 + 旧的运行时 = 不允许</li>
+<li>旧的生成代码 + 新的运行时 = 仅支持一小段时间</li>
+</ul>
+<p>体现在代码里：</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#if PROTOBUF_VERSION &lt; 3021000</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#error This file was generated by a newer version of protoc which is</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cp">#error incompatible with your Protocol Buffer headers. Please update</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="cp">#error your headers.</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="cp">#endif</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="cp">#if 3021012 &lt; PROTOBUF_MIN_PROTOC_VERSION</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="cp">#error This file was generated by an older version of protoc which is</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="cp">#error incompatible with your Protocol Buffer headers. Please</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="cp">#error regenerate this file with a newer version of protoc.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="cp">#endif</span>
 </span></code></pre></div>
-<p>二进制安装 Ros2 Humble 可以参考</p>
-<p><a href="https://docs.ros.org/en/humble/Installation/RHEL-Install-RPMs.html">https://docs.ros.org/en/humble/Installation/RHEL-Install-RPMs.html</a></p>
-<p>还需要额外做一些修复项：</p>
+<p>其中 302100 和 3021012 是生成的时候硬编码进去的内容，PROTOBUF_VERSION 和 PROTOBUF_MIN_PROTOC_VERSION 是构建时的值，分别表示当前 PROTOBUF 运行时版本和当前 PROTOBUF 运行时所能接受的最小 protoc 生成代码版本，不满足条件的情况下编译直接报错。</p>
+<h2 id="初步方案">初步方案<a class="headerlink" href="#初步方案" title="Permanent link">&para;</a></h2>
+<p>AimRT 中版本检查方案初步构想：</p>
 <ol>
-<li>编译 AimRT ros2_plugin 过程中需要安装一些缺少的 python 包</li>
+<li>
+<p>只使用一个值，AIMRT_GENCODE_VERSION，这个值与 AimRT 本身的版本号无关，只有<strong>生成代码部分产生变化</strong>或者<strong>使用生成代码的接口部分产生变化</strong>，这个值才会变化</p>
+<ol>
+<li>生成代码部分包括各个代码生成器中的模版代码和生成逻辑</li>
+<li>使用生成代码的部分包括 AimRT 中与 rpc 生成代码交互的部分</li>
 </ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">empy</span><span class="o">==</span><span class="m">3</span>.3.4<span class="w"> </span>catkin_pkg<span class="w"> </span>numpy<span class="w"> </span>lark
-</span></code></pre></div>
+</li>
+<li>
+<p>版本号采取 x.y.z 的形式，z 版本之间互相兼容，y 版本之间向前兼容，x 版本之间不兼容</p>
 <ol>
-<li>编译 iceoryx 插件需要安装 libatomic-devel 和 libacl-devel，编译 opentelemetry 插件需要安装 libcurl-devel</li>
+<li>3.4.1 与 3.4.2 完全兼容，无论如何搭配都兼容</li>
+<li>3.5.1 与 3.4.1 向前兼容，运行时 3.5.1 可以运行 3.4.1 生成的代码，而运行时 3.4.1 不能运行 3.5.1 生成的代码</li>
+<li>4.5.1 与 3.5.1 不兼容，无论如何搭配运行时和生成时代码版本都不能运行</li>
 </ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>dnf<span class="w"> </span>install<span class="w"> </span>gcc-toolset-14-libatomic-devel<span class="w"> </span>libacl-devel<span class="w"> </span>libcurl-devel
-</span></code></pre></div>
+</li>
+<li>
+<p>cpp 和 py 中各搞一套这个版本，互相独立</p>
 <ol>
-<li>编译 zenoh 插件需要安装 rust，而默认源安装较慢，建议使用国内源</li>
+<li>cpp 中不兼容则编译报错，如果不完全匹配则报编译警告</li>
+<li>py 中不兼容直接运行时报错</li>
 </ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 可以把以下两行添加到 ~/.bashrc 等文件，使之成为全局环境变量，这样后续所有 rustup 或 cargo 命令均会使用此环境变量</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RUSTUP_UPDATE_ROOT</span><span class="o">=</span>https://mirrors.ustc.edu.cn/rust-static/rustup
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RUSTUP_DIST_SERVER</span><span class="o">=</span>https://mirrors.tuna.tsinghua.edu.cn/rustup
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>curl<span class="w"> </span>--proto<span class="w"> </span><span class="s1">&#39;=https&#39;</span><span class="w"> </span>--tlsv1.2<span class="w"> </span>-sSf<span class="w"> </span>https://sh.rustup.rs<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</span></code></pre></div>
-<p>以上是加速 rust 本身的安装，如果要加速 rust 包的下载，可以替换 crates.io 源，更新 ~/.cargo/config 文件，内容如下</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="o">[</span>source.crates-io<span class="o">]</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/rust-lang/crates.io-index&quot;</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 替换成你偏好的镜像源</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>replace-with<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;sjtu&#39;</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1">#replace-with = &#39;ustc&#39;</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># 清华大学</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="o">[</span>source.tuna<span class="o">]</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1"># 中国科学技术大学</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="o">[</span>source.ustc<span class="o">]</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="c1"># 上海交通大学</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="o">[</span>source.sjtu<span class="o">]</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="c1"># rustcc社区</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="o">[</span>source.rustcc<span class="o">]</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="nv">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span>
-</span></code></pre></div>
-<ol>
-<li>此外针对 AimRT 仓库本身，还需要修改一下 pybind11 的头文件包含问题（gcc14 才出现）</li>
-</ol>
-<p><a href="https://github.com/pybind/pybind11/issues/5206">https://github.com/pybind/pybind11/issues/5206</a></p>
-<p>构建命令</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>/home
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>aimrt
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/AimRT/AimRT.git<span class="w"> </span>aimrt<span class="w"> </span>--depth<span class="o">=</span><span class="m">1</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">cd</span><span class="w"> </span>aimrt
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">source</span><span class="w"> </span>/opt/ros/humble/setup.bash
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>./build.sh<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span>-DAIMRT_BUILD_EXAMPLES<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span>-DAIMRT_BUILD_DOCUMENT<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span>-DAIMRT_BUILD_MQTT_PLUGIN<span class="o">=</span>OFF
-</span></code></pre></div>
-<p>最后对构建出的 wheel 包执行 <code>auditwheel repair</code> 命令，修复 wheel 包的 ABI 兼容性问题。</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>auditwheel<span class="w"> </span>repair<span class="w"> </span>build/aimrt_py_pkg/dist/aimrt_py-*.whl
-</span></code></pre></div>
-<p>最终修复后的 wheel 包位于 <code>/home/aimrt/wheelhouse</code> 目录下，其 ABI tag 为 <code>manylinux_2_28_x86_64</code>。</p>
-<h2 id="三结果">三、结果<a class="headerlink" href="#三结果" title="Permanent link">&para;</a></h2>
-<p>可以在 manylinux_2_28 上完整编译 AimRT，但是最终编出来的包中 ros2 相关的 .so 依赖一些在 manylinux 镜像上才有的动态库，例如 ros2  自身的一些动态库，还有其系统自带的 python3.6，导致其无法在 Ubuntu 22.04 上正常使用。</p>
-<p>此外一些其他的插件包也有一些符号依赖的问题，使用 <a href="https://github.com/messense/auditwheel-symbols">auditwheel-symbols</a> 工具检查结果如下：</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># auditwheel-symbols -m 2_28 build/aimrt_py_pkg/dist/aimrt_py-0.10.0-cp310-cp310-linux_x86_64.whl
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>aimrt_py/aimrt_python_runtime.cpython-310-x86_64-linux-gnu.so is manylinux_2_28 compliant.
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>aimrt_py/libaimrt_echo_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>aimrt_py/libaimrt_grpc_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>aimrt_py/libaimrt_iceoryx_plugin.so is not manylinux_2_28 compliant because it links the following forbidden libraries:
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>libacl.so.1
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>libatomic.so.1
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>aimrt_py/libaimrt_log_control_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>aimrt_py/libaimrt_mqtt_plugin.so is not manylinux_2_28 compliant because it links the following forbidden libraries:
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>libanl.so.1
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>libssl.so.1.1
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>libcrypto.so.1.1
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>aimrt_py/libaimrt_net_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>aimrt_py/libaimrt_opentelemetry_plugin.so is not manylinux_2_28 compliant because it links the following forbidden libraries:
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>libcurl.so.4
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>aimrt_py/libaimrt_parameter_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>aimrt_py/libaimrt_proxy_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>aimrt_py/libaimrt_record_playback_plugin.so is manylinux_2_28 compliant.
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>aimrt_py/libaimrt_time_manipulator_plugin.so is manylinux_2_28 compliant.
-</span></code></pre></div>
-<p>这与上述安装的内容有一定的对应关系。</p>
-<p>如果将这样的包上传 PyPI，其中需要去除至少 ros2、mqtt 相关的功能和插件，插件可以容易地下载，但是 ros2 相关功能想要通过额外的方式提供具有一定的困难，最终还是需要用户在指定的 Ubuntu 22.04 平台上运行，又需要额外下载内容，范式发散，得不偿失。</p>
-<p>结论：</p>
-<ol>
-<li>Wheel 包中至少有 ROS2 接口、ROS2 插件、mqtt 插件无法完整得到跨发行版二进制；</li>
-<li>将部分功能二进制上 PyPI 会导致用户使用时的困惑，增大维护难度；</li>
-<li>暂时不上 PyPI；</li>
-<li>Conda 使用问题通过文档说明进行 workaround（将 conda 中的 libstdc++ 软链接到系统的 libstdc++ 即可）。</li>
+</li>
 </ol>
 
 
@@ -888,7 +791,7 @@
     <span class="md-icon" title="创建日期">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2025年1月14日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2025年1月15日</span>
   </span>
 
     
@@ -898,12 +801,11 @@
   <span class="md-source-file__fact">
     <span class="md-icon" title="贡献者">
       
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
       
     </span>
     <nav>
       
-        <a href="mailto:zhangyi_1357@sjtu.edu.cn">zhangyi1357</a>
     </nav>
   </span>
 
@@ -938,7 +840,7 @@
       <nav class="md-footer__inner md-grid" aria-label="页脚" >
         
           
-          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="上一页: Welcome to Yi&#39;s DevJourney">
+          <a href="../aimrt-py-build-on-manylinux/" class="md-footer__link md-footer__link--prev" aria-label="上一页: AimRT-Py manylinux 构建">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -948,20 +850,20 @@
                 上一页
               </span>
               <div class="md-ellipsis">
-                Welcome to Yi's DevJourney
+                AimRT-Py manylinux 构建
               </div>
             </div>
           </a>
         
         
           
-          <a href="../aimrt-gencode-version-control/" class="md-footer__link md-footer__link--next" aria-label="下一页: AimRT 代码生成版本控制">
+          <a href="../git-usage/" class="md-footer__link md-footer__link--next" aria-label="下一页: Git 使用指南">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                AimRT 代码生成版本控制
+                Git 使用指南
               </div>
             </div>
             <div class="md-footer__button md-icon">
