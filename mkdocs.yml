@@ -4,6 +4,7 @@ nav:
   - 主页:
     - index.md
     - AimRT-Py manylinux 构建: aimrt-py-build-on-manylinux.md
+    - AimRT 代码生成版本控制: aimrt-gencode-version-control.md
   - 工具使用:
     - git-usage.md
     - clangd-usage.md
