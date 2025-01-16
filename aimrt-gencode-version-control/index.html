@@ -444,6 +444,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#更新版方案" class="md-nav__link">
+    <span class="md-ellipsis">
+      更新版方案
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -694,6 +703,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#更新版方案" class="md-nav__link">
+    <span class="md-ellipsis">
+      更新版方案
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -759,6 +777,54 @@
 </ol>
 </li>
 </ol>
+<h2 id="更新版方案">更新版方案<a class="headerlink" href="#更新版方案" title="Permanent link">&para;</a></h2>
+<p>单独使用一套版本号的方案很麻烦，以下是一个版本号依赖于 AimRT 主版本号的方案，同时引入当前版本最小支持版本的概念，与 Protobuf 的方案类似。</p>
+<p>生成代码版本为 0.10.0 对应数字版本为 10000，</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">static_assert</span><span class="p">(</span><span class="mi">10000</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">AIMRT_RUNTIME_VERSION_INT</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AIMRT_RUNTIME_VERSION is older than generated code version 0.10.0&quot;</span><span class="p">);</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">static_assert</span><span class="p">(</span><span class="n">AIMRT_MIN_GENCODE_VERSION_INT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AIMRT_MIN_GENCODE_VERSION is greater than generated code version 0.10.0&quot;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>仓库版本为 0.10.0 的情况下，AIMRT_RUNTIME_VERSION_INT 为 10000，AIMRT_MIN_GENCODE_VERSION_INT 为 9002，使用以上生成的代码可以正常编译运行</p>
+<p>AIMRT_MIN_GENCODE_VERSION_INT 的含义为当前 runtime 所能接受的最低版本生成代码的版本。</p>
+<p>现在分类讨论版本升级的情况：</p>
+<ol>
+<li>
+<p>假设仓库版本升级至 0.11.0，其中代码生成部分没有变化</p>
+<p>0.11.0 仓库的上述两个值为</p>
+<p>AIMRT_RUNTIME_VERSION_INT: 11000</p>
+<p>AIMRT_MIN_GENCODE_VERSION_INT: 9002</p>
+<p>新的生成代码不变，仍然可以正常编译运行</p>
+</li>
+<li>
+<p>假设仓库版本升级至 0.11.0 其中代码生成部分有变化，但是变更很小，兼容上一个版本更改</p>
+<p>0.11.0 仓库的上述两个值仍然为</p>
+<p>AIMRT_RUNTIME_VERSION_INT: 11000</p>
+<p>AIMRT__GENCODE_VERSION_INT: 9002</p>
+<p>新的生成代码变为：</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">static_assert</span><span class="p">(</span><span class="mi">11000</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">AIMRT_RUNTIME_VERSION_INT</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AIMRT_RUNTIME_VERSION is older than generated code version 0.11.0&quot;</span><span class="p">);</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">static_assert</span><span class="p">(</span><span class="n">AIMRT_MIN_GENCODE_VERSION_INT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">11000</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AIMRT_MIN_GENCODE_VERSION is greater than generated code version 0.11.0&quot;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>新生成的代码在老版本 runtime 无法运行，其中第一个 assert 会报错。</p>
+<p>但是老版本的代码在新版本 runtime 仍然可以运行。</p>
+</li>
+<li>
+<p>假设仓库升级至 0.11.0，其中代码生成部分有变化且变化不兼容，不希望老版本的代码在新版本 runtime 上仍然可以运行</p>
+<p>0.11.0 仓库的上述两个值则为</p>
+<p>AIMRT_RUNTIME_VERSION_INT: 11000</p>
+<p>AIMRT_MIN_GENCODE_VERSION_INT: 11000</p>
+<p>新的生成代码变为</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">static_assert</span><span class="p">(</span><span class="mi">11000</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">AIMRT_RUNTIME_VERSION_INT</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AIMRT_RUNTIME_VERSION is older than generated code version 0.11.0&quot;</span><span class="p">);</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">static_assert</span><span class="p">(</span><span class="n">AIMRT_MIN_GENCODE_VERSION_INT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">11000</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;AIMRT_MIN_GENCODE_VERSION is greater than generated code version 0.11.0&quot;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>新的生成代码在新版本 runtime 上可以正常运行</p>
+<p>但是在老版本的生成代码上第二个 assert 则会失败</p>
+</li>
+</ol>
+<p>版本升级时需要做的操作：</p>
+<ol>
+<li>AIMRT_RUNTIME_VERSION_INT 自动升级</li>
+<li>AIMRT_MIN_GENCODE_VERSION_INT 则要取决于生成代码版本是否有改动，如果有不兼容老版本的改动，则需要将其升级</li>
+<li>硬编码在生成代码中的值，例如上述的 10000，如果生成代码的模板有改动则要升级</li>
+</ol>
 
 
 
@@ -806,6 +872,8 @@
     </span>
     <nav>
       
+        <a href="mailto:not.committed.yet">Not Committed Yet</a>, 
+        <a href="mailto:zhangyi_1357@sjtu.edu.cn">zhangyi1357</a>
     </nav>
   </span>
 
